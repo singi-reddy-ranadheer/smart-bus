@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #0b5fff;
+  --color-primary-hover: #0848c4;
+  --color-primary-soft: #e8f0ff;
+  --color-secondary: #123152;
+  --color-accent: #f5a524;
+  --color-success: #168a5b;
+  --color-warning: #b54708;
+  --color-error: #d92d20;
+  --color-background: #f7f9fc;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f0f4f8;
+  --color-on-surface: #102a43;
+  --color-on-surface-muted: #627d98;
+  --color-outline: #d9e2ec;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: 'Plus Jakarta Sans', Inter, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
