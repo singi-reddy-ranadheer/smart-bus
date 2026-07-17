@@ -1,9 +1,8 @@
 import { TransportDataProvider } from './TransportDataProvider';
-import { ApiTransportDataProvider } from './ApiTransportDataProvider';
 import { DemoTransportDataProvider } from './DemoTransportDataProvider';
 
-// Real provider wired to the backend API
-export const dataProvider: TransportDataProvider = new ApiTransportDataProvider();
+// Use the demo provider for local preview so the app renders without a backend service.
+export const dataProvider: TransportDataProvider = new DemoTransportDataProvider();
 
 // Keep the demo provider available for fallback or testing
 export { DemoTransportDataProvider };
