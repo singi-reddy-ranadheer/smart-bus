@@ -15,7 +15,7 @@
     "incremental": true,
     "plugins": [{ "name": "next" }],
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./*"],
       "@smart-bus/shared": ["../../packages/shared/src"],
       "@smart-bus/ui": ["../../packages/ui/src"],
       "@smart-bus/config": ["../../packages/config/src"]

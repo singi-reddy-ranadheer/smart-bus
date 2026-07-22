@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "services/api"
+  - "services/notification"
+  - "services/simulator"

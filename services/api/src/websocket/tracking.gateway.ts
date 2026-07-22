@@ -109,7 +109,7 @@ export class TrackingGateway implements OnGatewayConnection, OnGatewayDisconnect
 
       return { event: 'gps:ack', data: { received: true } };
     } catch (err) {
-      this.logger.error(`GPS update error: ${err.message}`);
+      this.logger.error(`GPS update error: ${err instanceof Error ? err.message : String(err)}`);
       return { event: 'error', data: { message: 'Internal error' } };
     }
   }

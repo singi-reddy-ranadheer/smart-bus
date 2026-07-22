@@ -1,26 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
+import dynamic from 'next/dynamic';
 import { Users, AlertTriangle, Navigation } from 'lucide-react';
 import { driverApi, wsClient } from '@/lib/api';
 import { useLocation } from '@/hooks/use-location';
-import 'leaflet/dist/leaflet.css';
 
-// Fix default marker icons in Leaflet with webpack/bundlers
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+// Dynamically load the map to avoid SSR issues with Leaflet
+const TripMap = dynamic(() => import('@/components/TripMap'), {
+  ssr: false,
+  loading: () => <div className="h-full w-full bg-surface" />,
 });
-
-function RecenterMap({ center }: { center: [number, number] | null }) {
-  const map = useMap();
-  if (center) map.setView(center, 15);
-  return null;
-}
 
 export default function TripPage() {
   const [trip, setTrip] = useState<any>(null);
@@ -82,22 +72,7 @@ export default function TripPage() {
   return (
     <div className="h-[calc(100vh-120px)] flex flex-col">
       <div className="flex-1 relative rounded-xl overflow-hidden border border-outline">
-        <MapContainer center={center || [12.9716, 77.5946]} zoom={15} className="h-full w-full">
-          <TileLayer
-            attribution='&copy; OpenStreetMap'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {center && <RecenterMap center={center} />}
-          {center && (
-            <Marker position={center}>
-              <Popup>
-                <div className="text-xs">
-                  <strong>Your location</strong>
-                </div>
-              </Popup>
-            </Marker>
-          )}
-        </MapContainer>
+        <TripMap center={center} />
       </div>
 
       <div className="mt-4 space-y-3">

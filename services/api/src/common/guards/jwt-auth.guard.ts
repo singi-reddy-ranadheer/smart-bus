@@ -28,10 +28,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         });
       }
       request.user = {
+        ...data.user,
         id: data.user.id,
         email: data.user.email,
         role: data.user.app_metadata?.role || 'passenger',
-        ...data.user,
       };
       return true;
     } catch (err) {

@@ -1,0 +1,19 @@
+{
+  "name": "smart-bus",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.3",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "start": "turbo run start"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.8",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

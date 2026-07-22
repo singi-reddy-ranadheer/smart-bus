@@ -64,3 +64,5 @@ export class DriverApiClient {
 }
 
 export const driverApi = new DriverApiClient();
+
+export { wsClient, DriverWebSocketClient } from './websocket';
