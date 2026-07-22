@@ -1,0 +1,31 @@
+
+> @smart-bus/driver@0.1.0 build /vercel/share/v0-project/apps/driver
+> next build
+
+   ▲ Next.js 15.5.21
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 7.0s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/6) ...
+   Generating static pages (1/6) 
+   Generating static pages (2/6) 
+   Generating static pages (4/6) 
+ ✓ Generating static pages (6/6)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    3.39 kB         107 kB
+├ ○ /_not-found                            993 B         104 kB
+├ ○ /profile                             1.87 kB         105 kB
+└ ○ /trip                                3.82 kB         107 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/855b6565-221baf847127e0cd.js  54.2 kB
+  ├ chunks/881-e4a04159f8edfbb6.js       46.4 kB
+  └ other shared chunks (total)          2.48 kB
+
+
+○  (Static)  prerendered as static content
+
