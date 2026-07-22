@@ -1,19 +1,34 @@
--- Smart Bus AI — Migration 006: Create Stops Table
--- Individual bus stops with GPS coordinates.
+-- ============================================
+-- Sprint 1: Create Stops Table
+-- ============================================
 
-CREATE TABLE stops (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(255) NOT NULL,
-    latitude DOUBLE PRECISION NOT NULL,
-    longitude DOUBLE PRECISION NOT NULL,
-    landmark VARCHAR(255),
-    is_terminal BOOLEAN DEFAULT false,
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    deleted_at TIMESTAMPTZ
+CREATE TABLE IF NOT EXISTS stops (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  
+  -- Details
+  name VARCHAR(255) NOT NULL,
+  code VARCHAR(20) UNIQUE NOT NULL,
+  description TEXT,
+  
+  -- Location
+  latitude DECIMAL(10, 7) NOT NULL,
+  longitude DECIMAL(10, 7) NOT NULL,
+  
+  -- Amenities
+  has_shelter BOOLEAN DEFAULT FALSE,
+  has_bench BOOLEAN DEFAULT FALSE,
+  has_lighting BOOLEAN DEFAULT FALSE,
+  
+  -- Timestamps
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_stops_location ON stops USING GIST (
-    ll_to_earth(latitude, longitude)
-);
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_stops_code ON stops(code);
+
+-- Auto-update updated_at
+CREATE TRIGGER update_stops_updated_at BEFORE UPDATE ON stops
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+INSERT INTO schema_migrations (version) VALUES ('006_create_stops') ON CONFLICT DO NOTHING;

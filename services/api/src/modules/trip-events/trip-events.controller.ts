@@ -64,7 +64,7 @@ export class CreateTripEventDto {
 }
 
 @ApiTags('trip-events')
-@Controller('trip-events')
+@Controller('api/v1/trip-events')
 @UseGuards(JwtAuthGuard)
 export class TripEventsController {
   constructor(private readonly tripEventsService: TripEventsService) {}

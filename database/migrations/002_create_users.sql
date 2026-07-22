@@ -1,23 +1,38 @@
--- Smart Bus AI — Migration 002: Create Users Table
--- Core user accounts, linked to Supabase Auth.
+-- ============================================
+-- Sprint 1: Create Users Table
+-- ============================================
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
-CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    email VARCHAR(255) UNIQUE NOT NULL,
-    phone VARCHAR(20) UNIQUE,
-    name VARCHAR(255) NOT NULL,
-    avatar_url TEXT,
-    role user_role NOT NULL DEFAULT 'passenger',
-    is_active BOOLEAN DEFAULT true,
-    last_seen_at TIMESTAMPTZ,
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    deleted_at TIMESTAMPTZ
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  phone VARCHAR(20) UNIQUE,
+  full_name VARCHAR(255) NOT NULL,
+  role user_role NOT NULL DEFAULT 'passenger',
+  
+  -- Auth
+  is_email_verified BOOLEAN DEFAULT FALSE,
+  is_phone_verified BOOLEAN DEFAULT FALSE,
+  
+  -- Profile
+  avatar_url TEXT,
+  emergency_contact VARCHAR(20),
+  
+  -- Timestamps
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  last_login_at TIMESTAMP WITH TIME ZONE
 );
 
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_phone ON users(phone);
-CREATE INDEX idx_users_role ON users(role);
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone);
+CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+
+-- Auto-update updated_at
+CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- ============================================
+-- Version tracking
+-- ============================================
+INSERT INTO schema_migrations (version) VALUES ('002_create_users') ON CONFLICT DO NOTHING;

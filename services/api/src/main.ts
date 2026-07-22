@@ -1,44 +1,30 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe, Logger } from '@nestjs/common';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { AllExceptionsFilter } from './common/filters';
+import { LoggingInterceptor } from './common/interceptors';
+import helmet from 'helmet';
+import cors from 'cors';
+import compression from 'compression';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const logger = new Logger('Bootstrap');
+  const config = app.get(ConfigService);
+  const port = config.get('PORT') || 3001;
+  const allowedOrigins = [config.get('FRONTEND_URL'), config.get('ADMIN_URL'), config.get('DRIVER_URL')].filter(Boolean);
 
-  app.setGlobalPrefix('api/v1');
+  app.use(helmet());
+  app.use(cors({ origin: allowedOrigins, credentials: true }));
+  app.use(compression());
 
-  app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
-    credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
+  // Controllers already declare the 'api/v1' prefix, so no global prefix here.
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true, forbidNonWhitelisted: true }));
+  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      transformOptions: { enableImplicitConversion: true },
-    }),
-  );
-
-  const config = new DocumentBuilder()
-    .setTitle('Smart Bus AI API')
-    .setDescription('REST API for Smart Bus AI transportation platform')
-    .setVersion('0.1.0')
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
-
-  const port = process.env.PORT || 4000;
-  await app.listen(port, '0.0.0.0');
-  logger.log(`API server running on http://localhost:${port}/api/v1`);
-  logger.log(`Swagger docs at http://localhost:${port}/api/docs`);
+  await app.listen(port);
+  console.log(`🚍 Smart Bus API running on http://localhost:${port}`);
+  console.log(`📚 Swagger docs at http://localhost:${port}/docs`);
 }
-
 bootstrap();

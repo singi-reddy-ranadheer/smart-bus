@@ -1,23 +1,27 @@
--- Smart Bus AI — Seed 004: Sample Drivers
--- Creates 2 drivers for the demo simulation.
--- Note: user IDs should be replaced with actual Supabase Auth user IDs after registration.
+-- ============================================
+-- Seed Data: Drivers
+-- ============================================
+-- Note: Users must be created first since drivers.user_id references users.id
+-- Create users with driver role first, then reference them here
 
-INSERT INTO drivers (id, user_id, license_number, license_expiry, assigned_bus_id, status, total_trips) VALUES
-(
-    'd1e2f3a4-0001-4000-8000-000000000001',
-    '00000000-0000-0000-0000-000000000000', -- REPLACE with actual user_id after creating driver accounts
-    'DL-KA-2023-001234',
-    '2028-12-31',
-    'c1d2e3f4-0001-4000-8000-000000000001',
-    'available',
-    0
-),
-(
-    'd1e2f3a4-0002-4000-8000-000000000002',
-    '00000000-0000-0000-0000-000000000000', -- REPLACE with actual user_id after creating driver accounts
-    'DL-KA-2024-005678',
-    '2029-06-30',
-    'c1d2e3f4-0003-4000-8000-000000000003',
-    'available',
-    0
-);
+-- Driver 1
+INSERT INTO users (id, email, phone, full_name, role, is_email_verified, is_phone_verified)
+VALUES (gen_random_uuid(), 'driver1@smartbus.ai', '+919876543210', 'Ramesh Kumar', 'driver', true, true);
+
+-- Driver 2
+INSERT INTO users (id, email, phone, full_name, role, is_email_verified, is_phone_verified)
+VALUES (gen_random_uuid(), 'driver2@smartbus.ai', '+919876543211', 'Suresh Babu', 'driver', true, true);
+
+-- Now create driver records referencing the users
+-- (In practice, you'd query the user IDs; here we use CTEs for clarity)
+WITH driver1 AS (
+  SELECT id FROM users WHERE email = 'driver1@smartbus.ai'
+), driver2 AS (
+  SELECT id FROM users WHERE email = 'driver2@smartbus.ai'
+)
+INSERT INTO drivers (user_id, license_number, license_expiry, is_available, current_bus_id)
+SELECT id, 'TS-2023-001', '2028-12-31', true, (SELECT id FROM buses WHERE registration_number = 'TS-01-AB-1234')
+FROM driver1
+UNION ALL
+SELECT id, 'TS-2023-002', '2029-06-30', true, (SELECT id FROM buses WHERE registration_number = 'TS-01-CD-5678')
+FROM driver2;

@@ -1,22 +1,31 @@
--- Smart Bus AI — Seed 001: Sample Routes
--- Creates 2 bus routes for the demo.
+-- ============================================
+-- Seed Data: Routes
+-- ============================================
 
-INSERT INTO routes (id, name, description, color, total_distance, estimated_duration, status) VALUES
-(
-    'a1b2c3d4-0001-4000-8000-000000000001',
-    'Campus Express',
-    'Connects campus main gate to airport via library, bus stand, and railway station.',
-    '#E4572E',
-    12.5,
-    35,
-    'active'
-),
-(
-    'a1b2c3d4-0002-4000-8000-000000000002',
-    'City Loop',
-    'Circular route connecting city center to major landmarks including market, hospital, university, and tech park.',
-    '#7C3AED',
-    15.0,
-    45,
-    'active'
+-- Route 1: Campus Express
+INSERT INTO routes (id, name, code, description, color, start_latitude, start_longitude, end_latitude, end_longitude, distance_km, estimated_duration_minutes)
+VALUES (
+  gen_random_uuid(),
+  'Campus Express',
+  'CE-101',
+  'Connects campus gate to airport via key landmarks',
+  '#10B981',
+  17.3850, 78.4867, -- Start: Campus Gate
+  17.3710, 78.5090, -- End: Airport
+  12.0,
+  35
+);
+
+-- Route 2: City Loop
+INSERT INTO routes (id, name, code, description, color, start_latitude, start_longitude, end_latitude, end_longitude, distance_km, estimated_duration_minutes)
+VALUES (
+  gen_random_uuid(),
+  'City Loop',
+  'CL-201',
+  'Circular route covering city center, market, hospital, university and tech park',
+  '#F59E0B',
+  17.3850, 78.4867, -- Start: City Center
+  17.3850, 78.4867, -- End: City Center (loop)
+  15.0,
+  45
 );

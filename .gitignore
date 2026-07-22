@@ -1,23 +1,35 @@
-# JavaScript / Next.js
+# Dependencies
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
 .next/
-out/
-coverage/
+.turbo/
 
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-venv/
-models_cache/
-
-# Environment and local configuration
+# Environment
 .env
-.env.*
-!.env.example
+.env.local
+.env.*.local
 
-# Editor and operating-system files
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
 Thumbs.db
-.idea/
-.vscode/
+
+# Testing
+coverage/
+
+# Misc
+*.log
+
+# Obsidian vault configuration (local-only)
+.obsidian/

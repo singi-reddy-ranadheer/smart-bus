@@ -39,7 +39,7 @@ export class UpdateTripDto {
 }
 
 @ApiTags('trips')
-@Controller('trips')
+@Controller('api/v1/trips')
 @UseGuards(JwtAuthGuard)
 export class TripsController {
   constructor(private readonly tripsService: TripsService) {}

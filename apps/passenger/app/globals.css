@@ -1,6 +1,8 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
+:root {
   --color-background: #f7f9fc;
   --color-on-background: #102a43;
   
@@ -108,4 +110,3 @@ html, body {
 .text-label-caps {
   text-transform: uppercase;
 }
-

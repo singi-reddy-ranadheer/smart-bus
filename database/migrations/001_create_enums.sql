@@ -1,42 +1,45 @@
--- Smart Bus AI — Migration 001: Create Enums
--- Creates all custom enum types used across the schema.
+-- ============================================
+-- Sprint 1: Create Enums
+-- ============================================
 
 -- User roles
 CREATE TYPE user_role AS ENUM ('passenger', 'driver', 'admin', 'super_admin');
 
--- Bus operational status
-CREATE TYPE bus_status AS ENUM ('active', 'inactive', 'maintenance', 'retired');
+-- Bus status
+CREATE TYPE bus_status AS ENUM ('active', 'inactive', 'maintenance');
 
--- Driver availability
-CREATE TYPE driver_status AS ENUM ('available', 'on_trip', 'offline', 'off_duty');
+-- Trip status
+CREATE TYPE trip_status AS ENUM ('scheduled', 'in_progress', 'completed', 'cancelled');
 
--- Route lifecycle
-CREATE TYPE route_status AS ENUM ('active', 'inactive', 'archived');
-
--- Trip lifecycle
-CREATE TYPE trip_status AS ENUM ('scheduled', 'active', 'completed', 'cancelled');
-
--- Trip event types
-CREATE TYPE trip_event_type AS ENUM (
-    'GPS_UPDATE',
-    'BOARDING',
-    'ALIGHTING',
-    'TRIP_START',
-    'TRIP_END',
-    'SOS_ALERT',
-    'DELAY_REPORT',
-    'MAINTENANCE_REPORT',
-    'ROUTE_DEVIATION'
+-- Event types for trip tracking
+CREATE TYPE event_type AS ENUM (
+  'gps_update',
+  'stop_arrival',
+  'stop_departure',
+  'passenger_boarding',
+  'passenger_alighting',
+  'sos_alert',
+  'route_deviation'
 );
-
--- Notification channels
-CREATE TYPE notification_type AS ENUM ('push', 'sms', 'email', 'in_app');
-
--- Payment methods
-CREATE TYPE payment_method AS ENUM ('wallet', 'qr', 'rfid', 'cash');
 
 -- Payment status
 CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');
 
+-- Payment method
+CREATE TYPE payment_method AS ENUM ('cash', 'upi', 'card', 'wallet');
+
+-- Notification channels
+CREATE TYPE notification_channel AS ENUM ('push', 'sms', 'email', 'websocket');
+
 -- Prediction types
-CREATE TYPE prediction_type AS ENUM ('eta', 'demand', 'occupancy');
+CREATE TYPE prediction_type AS ENUM ('eta', 'demand', 'route_optimization');
+
+-- ============================================
+-- Version tracking
+-- ============================================
+CREATE TABLE IF NOT EXISTS schema_migrations (
+  version VARCHAR(50) PRIMARY KEY,
+  applied_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+INSERT INTO schema_migrations (version) VALUES ('001_create_enums') ON CONFLICT DO NOTHING;

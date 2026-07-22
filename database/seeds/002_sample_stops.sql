@@ -1,104 +1,21 @@
--- Smart Bus AI — Seed 002: Sample Stops
--- Creates 10 bus stops across 2 routes.
+-- ============================================
+-- Seed Data: Stops
+-- ============================================
 
-INSERT INTO stops (id, name, latitude, longitude, landmark, is_terminal) VALUES
--- Route 1: Campus Express stops (IDs 0001-0005)
-(
-    'b1c2d3e4-0001-4000-8000-000000000001',
-    'Campus Gate',
-    12.9716,
-    77.5946,
-    'Main University Entrance',
-    true
-),
-(
-    'b1c2d3e4-0002-4000-8000-000000000002',
-    'Library',
-    12.9740,
-    77.5950,
-    'Central Library Building',
-    false
-),
-(
-    'b1c2d3e4-0003-4000-8000-000000000003',
-    'Bus Stand',
-    12.9750,
-    77.6000,
-    'City Bus Terminal',
-    false
-),
-(
-    'b1c2d3e4-0004-4000-8000-000000000004',
-    'Railway Station',
-    12.9780,
-    77.6100,
-    'Main Railway Station',
-    false
-),
-(
-    'b1c2d3e4-0005-4000-8000-000000000005',
-    'Airport',
-    13.0000,
-    77.6500,
-    'Kempegowda International Airport',
-    true
-),
+-- Campus Express Stops (CE-101)
+INSERT INTO stops (id, name, code, description, latitude, longitude, has_shelter, has_bench, has_lighting)
+VALUES
+  (gen_random_uuid(), 'Campus Gate', 'CE-101-01', 'Main entrance to the university campus', 17.3850, 78.4867, true, true, true),
+  (gen_random_uuid(), 'Library', 'CE-101-02', 'Central library junction', 17.3830, 78.4900, true, true, true),
+  (gen_random_uuid(), 'Bus Stand', 'CE-101-03', 'City bus stand near market', 17.3790, 78.4950, true, true, true),
+  (gen_random_uuid(), 'Railway Station', 'CE-101-04', 'Main railway station', 17.3750, 78.5000, true, true, true),
+  (gen_random_uuid(), 'Airport', 'CE-101-05', 'International airport terminal', 17.3710, 78.5090, true, true, true);
 
--- Route 2: City Loop stops (IDs 0006-0010)
-(
-    'b1c2d3e4-0006-4000-8000-000000000006',
-    'City Center',
-    12.9650,
-    77.5900,
-    'MG Road Metro Station',
-    true
-),
-(
-    'b1c2d3e4-0007-4000-8000-000000000007',
-    'Market',
-    12.9670,
-    77.5920,
-    'KR Market',
-    false
-),
-(
-    'b1c2d3e4-0008-4000-8000-000000000008',
-    'Hospital',
-    12.9690,
-    77.5960,
-    'City General Hospital',
-    false
-),
-(
-    'b1c2d3e4-0009-4000-8000-000000000009',
-    'University',
-    12.9720,
-    77.5980,
-    'State University Campus',
-    false
-),
-(
-    'b1c2d3e4-0010-4000-8000-000000000010',
-    'Tech Park',
-    12.9680,
-    77.6020,
-    'IT Business Park',
-    true
-);
-
--- Link stops to routes with ordering
-INSERT INTO route_stops (route_id, stop_id, stop_order, distance_from_prev, time_from_prev) VALUES
--- Campus Express: Campus Gate (1) → Library (2) → Bus Stand (3) → Railway Station (4) → Airport (5)
-('a1b2c3d4-0001-4000-8000-000000000001', 'b1c2d3e4-0001-4000-8000-000000000001', 1, 0, 0),
-('a1b2c3d4-0001-4000-8000-000000000001', 'b1c2d3e4-0002-4000-8000-000000000002', 2, 1.2, 5),
-('a1b2c3d4-0001-4000-8000-000000000001', 'b1c2d3e4-0003-4000-8000-000000000003', 3, 2.5, 8),
-('a1b2c3d4-0001-4000-8000-000000000001', 'b1c2d3e4-0004-4000-8000-000000000004', 4, 3.0, 10),
-('a1b2c3d4-0001-4000-8000-000000000001', 'b1c2d3e4-0005-4000-8000-000000000005', 5, 5.8, 12),
-
--- City Loop: City Center (1) → Market (2) → Hospital (3) → University (4) → Tech Park (5) → back to City Center (6)
-('a1b2c3d4-0002-4000-8000-000000000002', 'b1c2d3e4-0006-4000-8000-000000000006', 1, 0, 0),
-('a1b2c3d4-0002-4000-8000-000000000002', 'b1c2d3e4-0007-4000-8000-000000000007', 2, 1.0, 5),
-('a1b2c3d4-0002-4000-8000-000000000002', 'b1c2d3e4-0008-4000-8000-000000000008', 3, 1.5, 7),
-('a1b2c3d4-0002-4000-8000-000000000002', 'b1c2d3e4-0009-4000-8000-000000000009', 4, 2.0, 8),
-('a1b2c3d4-0002-4000-8000-000000000002', 'b1c2d3e4-0010-4000-8000-000000000010', 5, 2.5, 10),
-('a1b2c3d4-0002-4000-8000-000000000002', 'b1c2d3e4-0006-4000-8000-000000000006', 6, 8.0, 15);
+-- City Loop Stops (CL-201)
+INSERT INTO stops (id, name, code, description, latitude, longitude, has_shelter, has_bench, has_lighting)
+VALUES
+  (gen_random_uuid(), 'City Center', 'CL-201-01', 'Central business district', 17.3850, 78.4867, true, true, true),
+  (gen_random_uuid(), 'Market', 'CL-201-02', 'Main market area', 17.3820, 78.4840, true, true, true),
+  (gen_random_uuid(), 'Hospital', 'CL-201-03', 'City general hospital', 17.3800, 78.4810, true, true, true),
+  (gen_random_uuid(), 'University', 'CL-201-04', 'State university campus', 17.3830, 78.4780, true, true, true),
+  (gen_random_uuid(), 'Tech Park', 'CL-201-05', 'Information technology park', 17.3870, 78.4820, true, true, true);

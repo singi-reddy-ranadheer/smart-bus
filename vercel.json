@@ -1,0 +1,14 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build --workspace=apps/passenger",
+  "outputDirectory": "apps/passenger/.next",
+  "installCommand": "npm install --workspaces --legacy-peer-deps",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://smart-bus-api.onrender.com/api/v1",
+    "NEXT_PUBLIC_SUPABASE_URL": "https://qykvyxmkorcomjtcjwso.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "sb_publishable_we7wj95ECwpcQvTWs3dKQg_x_gX9-BZ"
+  },
+  "workspaces": {
+    "apps/passenger": true
+  }
+}

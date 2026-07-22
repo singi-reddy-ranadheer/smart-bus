@@ -1,16 +1,17 @@
--- Smart Bus AI — Migration 010: Trip Event Immutable Trigger
--- Enforces that trip_events records can never be updated or deleted.
--- New rows are APPEND ONLY.
+-- ============================================
+-- Sprint 1: Make Trip Events Immutable
+-- ============================================
 
-CREATE OR REPLACE FUNCTION reject_trip_event_modification()
+CREATE OR REPLACE FUNCTION prevent_trip_event_update_delete()
 RETURNS TRIGGER AS $$
 BEGIN
-    RAISE EXCEPTION 'trip_events is immutable: records cannot be modified or deleted. Event ID: %', OLD.id
-        USING HINT = 'trip_events is an append-only log. Insert new records instead.';
+  RAISE EXCEPTION 'Trip events are immutable and cannot be modified or deleted';
+  RETURN NULL;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trip_events_immutable_trigger
-    BEFORE UPDATE OR DELETE ON trip_events
-    FOR EACH ROW
-    EXECUTE FUNCTION reject_trip_event_modification();
+CREATE TRIGGER trip_events_immutable
+  BEFORE UPDATE OR DELETE ON trip_events
+  FOR EACH ROW EXECUTE FUNCTION prevent_trip_event_update_delete();
+
+INSERT INTO schema_migrations (version) VALUES ('010_create_trip_event_immutable_trigger') ON CONFLICT DO NOTHING;

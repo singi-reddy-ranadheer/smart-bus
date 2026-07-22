@@ -1,0 +1,32 @@
+{
+  "name": "smart-bus-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-powered intelligent transportation ecosystem",
+  "workspaces": [
+    "apps/*",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:migrate": "echo 'Run migrations in Supabase SQL Editor'",
+    "db:seed": "echo 'Run seed files in Supabase SQL Editor'"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.16",
+    "prettier": "^3.0.3",
+    "eslint": "^8.48.0",
+    "@types/node": "^20.8.0",
+    "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "packageManager": "npm@9.8.1"
+}

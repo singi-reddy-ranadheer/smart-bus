@@ -1,38 +1,46 @@
-import { RouteDefinition, Waypoint } from '../types';
+import { BaseRoute, Stop } from '../route-follower';
 
-// Generate interpolated waypoints between two points
-function interpolate(a: Waypoint, b: Waypoint, segments: number): Waypoint[] {
-  const points: Waypoint[] = [];
-  for (let i = 1; i <= segments; i++) {
-    const t = i / segments;
-    points.push({
-      lat: a.lat + (b.lat - a.lat) * t,
-      lng: a.lng + (b.lng - a.lng) * t,
-    });
+export class CampusRoute extends BaseRoute {
+  id = 'campus-express';
+  name = 'Campus Express';
+
+  async load(): Promise<void> {
+    this.stops = [
+      {
+        id: 'stop-1',
+        name: 'Campus Gate',
+        code: 'CE-101-01',
+        latitude: 17.3850,
+        longitude: 78.4867,
+      },
+      {
+        id: 'stop-2',
+        name: 'Library',
+        code: 'CE-101-02',
+        latitude: 17.3830,
+        longitude: 78.4900,
+      },
+      {
+        id: 'stop-3',
+        name: 'Bus Stand',
+        code: 'CE-101-03',
+        latitude: 17.3790,
+        longitude: 78.4950,
+      },
+      {
+        id: 'stop-4',
+        name: 'Railway Station',
+        code: 'CE-101-04',
+        latitude: 17.3750,
+        longitude: 78.5000,
+      },
+      {
+        id: 'stop-5',
+        name: 'Airport',
+        code: 'CE-101-05',
+        latitude: 17.3710,
+        longitude: 78.5090,
+      },
+    ];
   }
-  return points;
 }
-
-const stops: Waypoint[] = [
-  { lat: 12.9716, lng: 77.5946 }, // Campus Gate
-  { lat: 12.974, lng: 77.595 }, // Library
-  { lat: 12.975, lng: 77.6 }, // Bus Stand
-  { lat: 12.978, lng: 77.61 }, // Railway Station
-  { lat: 13.0, lng: 77.65 }, // Airport
-];
-
-// Build waypoints by interpolating 8 points between each consecutive stop
-const waypoints: Waypoint[] = [stops[0]];
-for (let i = 0; i < stops.length - 1; i++) {
-  waypoints.push(...interpolate(stops[i], stops[i + 1], 8));
-}
-waypoints.push(stops[stops.length - 1]);
-
-export const campusRoute: RouteDefinition = {
-  id: 'a1b2c3d4-0001-4000-8000-000000000001',
-  name: 'Campus Express',
-  color: '#E4572E',
-  stops,
-  waypoints,
-  totalDistance: 12.5,
-};

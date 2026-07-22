@@ -1,21 +1,31 @@
--- Smart Bus AI — Migration 004: Create Drivers Table
--- Driver profiles linked to user accounts.
+-- ============================================
+-- Sprint 1: Create Drivers Table
+-- ============================================
 
-CREATE TABLE drivers (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID UNIQUE NOT NULL REFERENCES users(id),
-    license_number VARCHAR(50) UNIQUE NOT NULL,
-    license_expiry DATE,
-    assigned_bus_id UUID REFERENCES buses(id),
-    status driver_status NOT NULL DEFAULT 'offline',
-    total_trips INTEGER DEFAULT 0,
-    rating FLOAT,
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    deleted_at TIMESTAMPTZ
+CREATE TABLE IF NOT EXISTS drivers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  
+  -- Details
+  license_number VARCHAR(50) UNIQUE NOT NULL,
+  license_expiry DATE NOT NULL,
+  
+  -- Status
+  is_available BOOLEAN DEFAULT TRUE,
+  current_bus_id UUID REFERENCES buses(id),
+  
+  -- Timestamps
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_drivers_user ON drivers(user_id);
-CREATE INDEX idx_drivers_license ON drivers(license_number);
-CREATE INDEX idx_drivers_status ON drivers(status);
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_drivers_user_id ON drivers(user_id);
+CREATE INDEX IF NOT EXISTS idx_drivers_license ON drivers(license_number);
+CREATE INDEX IF NOT EXISTS idx_drivers_available ON drivers(is_available);
+
+-- Auto-update updated_at
+CREATE TRIGGER update_drivers_updated_at BEFORE UPDATE ON drivers
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+INSERT INTO schema_migrations (version) VALUES ('004_create_drivers') ON CONFLICT DO NOTHING;

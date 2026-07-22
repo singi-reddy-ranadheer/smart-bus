@@ -30,7 +30,7 @@ export class UpdateUserDto {
 }
 
 @ApiTags('users')
-@Controller('users')
+@Controller('api/v1/users')
 @UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

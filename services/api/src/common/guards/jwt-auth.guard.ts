@@ -1,12 +1,9 @@
-import { Injectable, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Injectable, ExecutionContext, UnauthorizedException, CanActivate } from '@nestjs/common';
 import { SupabaseService } from '../../database/supabase.service';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
-  constructor(private readonly supabaseService: SupabaseService) {
-    super();
-  }
+export class JwtAuthGuard implements CanActivate {
+  constructor(private readonly supabaseService: SupabaseService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -31,7 +28,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         id: data.user.id,
         email: data.user.email,
         role: data.user.app_metadata?.role || 'passenger',
-        ...data.user,
+        user_metadata: data.user.user_metadata,
       };
       return true;
     } catch (err) {

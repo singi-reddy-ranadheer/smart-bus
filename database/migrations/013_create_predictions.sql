@@ -1,20 +1,30 @@
--- Smart Bus AI — Migration 013: Create Predictions Table
--- AI model prediction records.
+-- ============================================
+-- Sprint 1: Create Predictions Table
+-- ============================================
 
-CREATE TABLE predictions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    trip_id UUID REFERENCES trips(id),
-    route_id UUID REFERENCES routes(id),
-    stop_id UUID REFERENCES stops(id),
-    prediction_type prediction_type NOT NULL,
-    value FLOAT NOT NULL,
-    confidence FLOAT,
-    model_version VARCHAR(50) NOT NULL,
-    features_hash VARCHAR(64),
-    metadata JSONB DEFAULT '{}',
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+CREATE TABLE IF NOT EXISTS predictions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  
+  -- Target
+  type prediction_type NOT NULL,
+  entity_id UUID NOT NULL, -- Route ID for ETA, area ID for demand
+  
+  -- Prediction
+  predicted_value JSONB NOT NULL,
+  confidence_score DECIMAL(5, 4),
+  
+  -- Model version
+  model_version VARCHAR(50),
+  
+  -- Timestamps
+  valid_from TIMESTAMP WITH TIME ZONE NOT NULL,
+  valid_until TIMESTAMP WITH TIME ZONE NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE INDEX idx_pred_type ON predictions(prediction_type);
-CREATE INDEX idx_pred_trip ON predictions(trip_id);
-CREATE INDEX idx_pred_model ON predictions(model_version);
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_predictions_type ON predictions(type);
+CREATE INDEX IF NOT EXISTS idx_predictions_entity ON predictions(entity_id);
+CREATE INDEX IF NOT EXISTS idx_predictions_valid_until ON predictions(valid_until);
+
+INSERT INTO schema_migrations (version) VALUES ('013_create_predictions') ON CONFLICT DO NOTHING;

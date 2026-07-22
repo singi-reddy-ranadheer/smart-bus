@@ -1,0 +1,32 @@
+# Smart Bus AI — Render Deployment Configuration
+# Free tier: 750 hours/month, 512MB RAM, auto-deploy from Git
+services:
+  - type: web
+    name: smart-bus-api
+    runtime: node
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm run start
+    rootDir: services/api
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+      - key: API_VERSION
+        value: v1
+      - key: SUPABASE_URL
+        fromSecret: SUPABASE_URL
+      - key: SUPABASE_ANON_KEY
+        fromSecret: SUPABASE_ANON_KEY
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        fromSecret: SUPABASE_SERVICE_ROLE_KEY
+      - key: JWT_SECRET
+        fromSecret: JWT_SECRET
+      - key: JWT_EXPIRY
+        value: 7d
+      - key: FRONTEND_URL
+        fromSecret: FRONTEND_URL
+      - key: WS_URL
+        fromSecret: WS_URL
+    healthCheckPath: /health
+    autoDeploy: true
