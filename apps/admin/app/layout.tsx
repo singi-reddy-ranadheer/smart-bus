@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './globals.css';
 import { Bus, Route, MapPin, LayoutDashboard } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: 'Smart Bus AI — Admin',
@@ -53,6 +54,7 @@ export default function RootLayout({
           {/* Main content */}
           <main className="flex-1 overflow-auto p-8">{children}</main>
         </div>
+        <Analytics />
       </body>
     </html>
   );
