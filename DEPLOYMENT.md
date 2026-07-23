@@ -13,23 +13,35 @@ This project uses a free-tier hosting stack:
 
 ## 1. Vercel (Web App)
 
-### Setup
+### Option A: Root Directory = `apps/passenger` (Recommended)
 1. Go to [vercel.com](https://vercel.com) and sign up with GitHub
-2. Import your `smart-bus` repository
-3. Vercel will auto-detect `vercel.json` and configure the build
-4. Set these environment variables in the Vercel dashboard:
+2. Click **Add New...** → **Project**
+3. Import the `singi-reddy-ranadheer/smart-bus` repository
+4. In the **Configure Project** screen:
+   - **Root Directory**: Click *Edit* and select `apps/passenger`
+   - **Framework Preset**: `Next.js`
+   - **Build Command**: `npm run build` *(uses `apps/passenger/vercel.json`)*
+   - **Output Directory**: `.next`
+5. Add these environment variables in the Vercel dashboard (Settings → Environment Variables):
 
-```
-NEXT_PUBLIC_API_URL=https://smart-bus-api.onrender.com/api/v1
-NEXT_PUBLIC_SUPABASE_URL=https://qykvyxmkorcomjtcjwso.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_we7wj95ECwpcQvTWs3dKQg_x_gX9-BZ
-```
+| Key | Value | Environments |
+|-----|-------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://qykvyxmkorcomjtcjwso.supabase.co` | Production, Preview, Development |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | *(your Supabase anon key)* | Production, Preview, Development |
+| `NEXT_PUBLIC_API_URL` | `https://smart-bus-api.onrender.com/api/v1` | Production, Preview, Development |
 
-### Build Settings
+### Option B: Deploy from Repository Root
+If deploying from the root directory, the `vercel.json` at the project root configures the monorepo build automatically:
+1. Go to [vercel.com](https://vercel.com) and sign up with GitHub
+2. Import your `smart-bus` repository (no root directory override needed)
+3. Vercel will use the root `vercel.json` for configuration
+4. Set the same environment variables listed above
+
+### Build Settings (Root vercel.json)
 - **Framework**: Next.js
-- **Build Command**: `npm run build --workspace=apps/passenger`
-- **Output Directory**: `apps/passenger/.next`
-- **Install Command**: `npm install --workspaces --legacy-peer-deps`
+- **Build Command**: `cd ../.. && npx turbo run build --filter=@smart-bus/passenger...`
+- **Install Command**: `npm install --legacy-peer-deps`
+- **Output Directory**: `.next`
 
 ## 2. Supabase (Database)
 
