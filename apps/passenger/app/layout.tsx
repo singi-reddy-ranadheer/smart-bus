@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import './globals.css';
 import { AppHeader } from '@/components/AppHeader';
 import { BottomNavigation } from '@/components/BottomNavigation';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -29,8 +30,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AppHeader />
         {children}
         <BottomNavigation />
+        <Analytics />
       </body>
     </html>
   );
 }
-

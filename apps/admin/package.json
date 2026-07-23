@@ -17,6 +17,7 @@
     "lucide-react": "^0.460.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^2.5.4",
+    "@vercel/analytics": "^1.4.1",
     "@smart-bus/shared": "0.1.0",
     "@smart-bus/ui": "0.1.0",
     "@smart-bus/config": "0.1.0"
