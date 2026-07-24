@@ -2,6 +2,7 @@ import { TransportDataProvider } from './TransportDataProvider';
 import type { Bus, Route, Stop, User, LiveLocationUpdate } from './types';
 import { apiClient } from '../api';
 import { subscribeToBusLocations } from '../supabase-realtime';
+import { supabase } from '../supabase';
 
 export class ApiTransportDataProvider implements TransportDataProvider {
   private buses: Bus[] = [];
@@ -11,19 +12,50 @@ export class ApiTransportDataProvider implements TransportDataProvider {
   private unsubscribers: Array<() => void> = [];
 
   async signIn(email: string, password: string): Promise<User> {
-    return { id: 'temp', email, name: 'User', role: 'passenger', created_at: new Date().toISOString() };
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw new Error(error.message);
+    if (!data.user) throw new Error('No user returned from sign in');
+    return this.mapSupabaseUser(data.user);
   }
 
   async register(email: string, password: string, name: string, phone?: string): Promise<User> {
-    return { id: 'temp', email, name, phone, role: 'passenger', created_at: new Date().toISOString() };
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          name,
+          phone: phone || '',
+          role: 'passenger',
+        },
+      },
+    });
+    if (error) throw new Error(error.message);
+    if (!data.user) throw new Error('No user returned from registration');
+    return this.mapSupabaseUser(data.user);
   }
 
   async getCurrentUser(): Promise<User | null> {
-    return null;
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data.user) return null;
+    return this.mapSupabaseUser(data.user);
   }
 
   async signOut(): Promise<void> {
-    return;
+    const { error } = await supabase.auth.signOut();
+    if (error) throw new Error(error.message);
+  }
+
+  private mapSupabaseUser(supabaseUser: any): User {
+    return {
+      id: supabaseUser.id,
+      email: supabaseUser.email || '',
+      name: supabaseUser.user_metadata?.name || supabaseUser.email?.split('@')[0] || 'User',
+      phone: supabaseUser.user_metadata?.phone || '',
+      role: supabaseUser.user_metadata?.role || 'passenger',
+      avatar_url: supabaseUser.user_metadata?.avatar_url || undefined,
+      created_at: supabaseUser.created_at || new Date().toISOString(),
+    };
   }
 
   async getBuses(): Promise<Bus[]> {

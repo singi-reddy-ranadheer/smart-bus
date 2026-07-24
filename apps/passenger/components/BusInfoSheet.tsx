@@ -17,7 +17,7 @@ export function BusInfoSheet({ bus, route, onClose }: BusInfoSheetProps) {
   if (!bus) return null;
 
   return (
-    <div 
+    <div
       className={clsx(
         "fixed bottom-0 w-full z-40 bg-surface rounded-t-2xl shadow-[0_-8px_24px_rgba(16,42,67,0.14)] border border-outline-variant border-b-0 bottom-sheet flex flex-col transition-transform duration-300 ease-out pb-[calc(72px+env(safe-area-inset-bottom))]",
         isOpen ? "translate-y-0" : "translate-y-full"
@@ -59,26 +59,26 @@ export function BusInfoSheet({ bus, route, onClose }: BusInfoSheetProps) {
           <div className="flex flex-col">
             <span className="text-on-surface-variant font-body-md text-body-md mb-0.5">Next Stop</span>
             <span className="font-headline-sm text-headline-sm text-on-surface">
-              {route?.stops?.[1]?.name || 'Library'} (Demo)
+              {route?.stops?.[1]?.name || 'Library'}
             </span>
           </div>
           <div className="flex flex-col items-end text-right">
             <span className="font-headline-md text-headline-md text-primary tracking-tight">
               12 <span className="text-lg font-normal">min</span>
             </span>
-            <span className="text-on-surface-variant font-body-md text-body-md text-xs mt-1">DEMO DATA</span>
+            <span className="text-on-surface-variant font-body-md text-body-md text-xs mt-1">via GPS</span>
           </div>
         </div>
 
         {/* Route Timeline */}
         <div className="flex flex-col mt-2 relative pl-2">
           <h3 className="font-label-data text-label-data text-on-surface-variant mb-4 uppercase tracking-wider">Route Progress</h3>
-          
+
           {/* Vertical Line Background */}
           <div className="absolute left-6 top-10 bottom-4 w-[2px] bg-surface-variant z-0"></div>
           {/* Vertical Line Active Progress (simulated) */}
           <div className="absolute left-6 top-10 h-16 w-[2px] bg-primary z-0"></div>
-          
+
           <div className="flex flex-col gap-6 relative z-10">
             {/* Past Stop */}
             <div className="flex items-start gap-4 opacity-60">
@@ -114,7 +114,7 @@ export function BusInfoSheet({ bus, route, onClose }: BusInfoSheetProps) {
               </div>
               <div className="flex flex-col pt-1">
                 <span className="font-label-data text-label-data text-on-surface">
-                   {route?.stops?.[route.stops.length - 1]?.name || 'Terminal'}
+                  {route?.stops?.[route.stops.length - 1]?.name || 'Terminal'}
                 </span>
                 <span className="font-body-md text-body-md text-on-surface-variant text-xs">Est. later</span>
               </div>
@@ -124,7 +124,7 @@ export function BusInfoSheet({ bus, route, onClose }: BusInfoSheetProps) {
 
         {/* Actions */}
         <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-surface-variant">
-          <Link 
+          <Link
             href={`/route/${route?.id || bus.current_route_id}`}
             className="w-full bg-primary-container text-on-primary h-14 rounded-xl font-label-data text-label-data flex items-center justify-center gap-2 hover:bg-primary transition-colors shadow-sm"
           >

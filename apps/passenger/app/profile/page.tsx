@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { User } from '@/lib/data/types';
 import { dataProvider } from '@/lib/data';
 import { Edit2, UserCog, HelpCircle, Shield, LogOut, ChevronRight } from 'lucide-react';
+import { LoadingSpinner } from '@smart-bus/ui';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null);
@@ -25,7 +26,7 @@ export default function ProfilePage() {
     router.push('/login');
   };
 
-  if (!user) return null;
+  if (!user) return <div className="flex items-center justify-center min-h-screen"><LoadingSpinner size={32} /></div>;
 
   return (
     <main className="flex-grow pt-[calc(56px+env(safe-area-inset-top))] pb-[calc(72px+env(safe-area-inset-bottom))] px-page-padding-mobile md:px-page-padding-desktop max-w-max-width-desktop mx-auto w-full">

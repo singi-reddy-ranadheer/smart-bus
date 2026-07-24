@@ -145,7 +145,7 @@ export default function MapSurface({
                  <Popup>
                     <div className="text-center">
                       <p className="font-label-data text-label-data text-on-surface m-0">{bus.current_route?.name || 'Bus'}</p>
-                      <p className="font-body-md text-body-md text-on-surface-variant m-0">DEMO ONLY</p>
+                      
                     </div>
                  </Popup>
               )}

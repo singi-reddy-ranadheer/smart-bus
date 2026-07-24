@@ -1,19 +1,27 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Search, ArrowRight, WifiOff } from 'lucide-react';
+import { Search, ArrowRight } from 'lucide-react';
 import { Route, Bus } from '@/lib/data/types';
 import { dataProvider } from '@/lib/data';
+import { EmptyState, LoadingSpinner } from '@smart-bus/ui';
 
 export default function RoutesPage() {
   const [routes, setRoutes] = useState<Route[]>([]);
   const [buses, setBuses] = useState<Bus[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    dataProvider.getRoutes().then(setRoutes);
-    dataProvider.getBuses().then(setBuses);
+    Promise.all([
+      dataProvider.getRoutes(),
+      dataProvider.getBuses()
+    ]).then(([r, b]) => {
+      setRoutes(r);
+      setBuses(b);
+      setLoading(false);
+    });
   }, []);
 
   const filteredRoutes = useMemo(() => {
@@ -21,6 +29,14 @@ export default function RoutesPage() {
     if (!query) return routes;
     return routes.filter((route) => route.name.toLowerCase().includes(query));
   }, [routes, searchQuery]);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-background px-4 py-6 text-on-background flex items-center justify-center">
+        <LoadingSpinner size={32} />
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-background px-4 py-6 text-on-background">
@@ -41,7 +57,6 @@ export default function RoutesPage() {
         <div className="flex flex-col gap-4">
           {filteredRoutes.map((route) => {
             const activeBusesCount = buses.filter((bus) => bus.current_route_id === route.id).length;
-
             return (
               <div key={route.id} className="rounded-2xl border border-outline-variant bg-surface p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-4">
@@ -52,12 +67,9 @@ export default function RoutesPage() {
                     </p>
                   </div>
                   {activeBusesCount > 0 && (
-                    <span className="rounded-full bg-primary-container px-3 py-1 text-sm font-medium text-on-primary-container">
-                      {activeBusesCount} active
-                    </span>
+                    <span className="rounded-full bg-primary-container px-3 py-1 text-sm font-medium text-on-primary-container">{activeBusesCount} active</span>
                   )}
                 </div>
-
                 <div className="mt-4 grid gap-3 rounded-xl border border-outline-variant/50 bg-background/60 p-3 sm:grid-cols-3">
                   <div>
                     <p className="text-xs uppercase tracking-wide text-outline">Distance</p>
@@ -72,8 +84,7 @@ export default function RoutesPage() {
                     <p className="mt-1 text-sm">{route.stops?.length || 0} total</p>
                   </div>
                 </div>
-
-                <Link href={`/route/${route.id}`} className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-medium text-on-primary">
+                <Link href={'/route/' + route.id} className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-primary px-4 py-3 font-medium text-on-primary">
                   View route
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -82,11 +93,10 @@ export default function RoutesPage() {
           })}
 
           {filteredRoutes.length === 0 && (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-outline-variant bg-surface-container-lowest p-8 text-center">
-              <WifiOff className="h-8 w-8 text-outline" />
-              <h4 className="mt-3 text-lg font-semibold">No routes found</h4>
-              <p className="mt-1 text-sm text-on-surface-variant">Try a different search term.</p>
-            </div>
+            <EmptyState
+              title={searchQuery ? 'No routes found' : 'No routes available'}
+              description={searchQuery ? 'Try a different search term.' : 'Routes will appear here once available.'}
+            />
           )}
         </div>
       </div>

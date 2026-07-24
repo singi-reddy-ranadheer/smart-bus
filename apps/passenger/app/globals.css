@@ -5,12 +5,12 @@
 :root {
   --color-background: #f7f9fc;
   --color-on-background: #102a43;
-  
+
   --color-surface: #ffffff;
   --color-on-surface: #102a43;
   --color-surface-variant: #f0f4f8;
   --color-on-surface-variant: #627d98;
-  
+
   --color-surface-bright: #ffffff;
   --color-surface-container-lowest: #ffffff;
   --color-surface-container-low: #f7f9fc;
@@ -39,7 +39,7 @@
 
   --color-outline: #627d98;
   --color-outline-variant: #d9e2ec;
-  
+
   --color-error: #ef4444;
   --color-on-error: #ffffff;
 
@@ -83,12 +83,12 @@
   --text-headline-md--letter-spacing: -0.01em;
   --text-headline-md--font-weight: 700;
 
-  --text-body-md: 12px;
-  --text-body-md--line-height: 18px;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 20px;
   --text-body-md--font-weight: 400;
 
-  --text-body-lg: 14px;
-  --text-body-lg--line-height: 20px;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 24px;
   --text-body-lg--font-weight: 400;
 
   --text-headline-lg-mobile: 24px;
@@ -97,13 +97,26 @@
 }
 
 @layer utilities {
-  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
-  .pt-safe { padding-top: env(safe-area-inset-top, 20px); }
-  .hide-scrollbar::-webkit-scrollbar { display: none; }
-  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 20px);
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
-html, body {
+html,
+body {
   overscroll-behavior-y: none;
 }
 

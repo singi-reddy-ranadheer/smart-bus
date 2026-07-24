@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Bus as BusIcon, Route as RouteIcon, Check, LocateFixed, MapPin } from 'lucide-react';
+import { LoadingSpinner, EmptyState } from '@smart-bus/ui';
 import { Route, Bus, LiveLocationUpdate } from '@/lib/data/types';
 import { dataProvider } from '@/lib/data';
 
@@ -42,8 +43,8 @@ export default function RouteDetailsPage() {
 
   const activeBuses = useMemo(() => buses.filter(b => b.current_route_id === routeId), [buses, routeId]);
 
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
-  if (!route) return <div className="p-8 text-center text-error">Route not found</div>;
+  if (loading) return <div className="p-8 text-center flex items-center justify-center min-h-[50vh]"><LoadingSpinner size={32} /></div>;
+  if (!route) return <div className="p-8 text-center min-h-[50vh] flex items-center justify-center"><EmptyState icon={<RouteIcon className="w-12 h-12 text-error" />} title="Route not found" description="The route you are looking for does not exist or has been removed." /></div>;
 
   return (
     <main className="md:pt-20 md:max-w-max-width-desktop md:mx-auto md:px-page-padding-desktop px-0 pb-24 bg-background min-h-screen">
